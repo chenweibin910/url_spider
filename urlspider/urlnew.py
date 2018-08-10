@@ -331,8 +331,8 @@ def mytime(threads):
     time.sleep(5)
     url.printLog('sub thread start!the thread name is:%s\r' % threading.currentThread().getName())
     progress = 0
-    # list = ['▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏'
-    #     , '▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏','▏']
+    list = ['■','■','■','■','■','■','■','■','■','■','■','■','■','■','■','■','■','■'
+        , '■','■','■','■','■','■','■','■','■','■','■','■','■','■','■','■']
     while not threads[0]._is_stopped:
         # url.printLog(time.ctime())
         # time.sleep(5)
@@ -342,10 +342,12 @@ def mytime(threads):
         #     sys.stdout.flush()
         # sys.stdout.write(" progress: %d%%   \r" % (int(time.time() - t)))
         if progress != 0:
-            # for i in range(0,int(progress*len(list)/100)):
-            #     sys.stdout.write('▏')
-            # sys.stdout.write('\r')
-            sys.stdout.write("Download progress: %d%%   \r" % progress)
+            for i in range(0,int(progress*len(list)/100)):
+                sys.stdout.write('■')
+            sys.stdout.write(' %d%%   \r' % progress)
+            if progress == 100:
+                break
+            # sys.stdout.write("Download progress: %d%%   \r" % progress)
             sys.stdout.flush()
             time.sleep(0.2)
     sys.stdout.write(" progress: %d%%   \r" % (100))
