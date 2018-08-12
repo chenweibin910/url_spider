@@ -273,7 +273,8 @@ class urlfind(object):
         try:
             self.path = input('input workspace:\t')
             if self.path:
-                if not re.match(r'(?:(([a-zA-Z0-9]*)+\\)* )',self.path ):
+                print('input path is %s' % self.path)
+                if not re.match(r'^([a-zA-Z]?:\\)[(a-zA-Z0-9\_)\\?]*',self.path ):
                     print( 'input path format error.')
                     raise Exception
             self.time = time.time()
@@ -284,33 +285,30 @@ class urlfind(object):
             dest_path = self.path + r'\new'
             # print('workspace = %s' % self.path)
             self.printLog('workspace = %s' % self.path,True)
-            try:
-                img_list, text_find = self.get_request(self.url, self.text_path, self.reg)
+            img_list, text_find = self.get_request(self.url, self.text_path, self.reg)
 
-                recv = self.path_del_create(self.path, dest_path)
-                if not recv:
-                    # print('update %s failed.' % self.path)
-                    self.printLog('update %s failed.' % self.path,True)
-                    raise exp
-                recv = self.downloadAndSave_pic(self.path, img_list)
-                if not recv:
-                    # print('ERROR.')
-                    self.printLog('ERROR.',True)
-                    raise exp
+            rst = self.path_del_create(self.path, dest_path)
+            if not rst:
+                # print('update %s failed.' % self.path)
+                self.printLog('update %s failed.' % self.path,True)
+                raise Exception
+            rst = self.downloadAndSave_pic(self.path, img_list)
+            if not rst:
+                # print('ERROR.')
+                self.printLog('download flie error.',True)
+                raise Exception
 
-                imPathList = self.get_picPathList(self.path)
+            imPathList = self.get_picPathList(self.path)
 
-                image = self.unionPic(self.path, dest_path, imPathList)
+            image = self.unionPic(self.path, dest_path, imPathList)
 
-                image.show()
-                # print('open destination photo success.')
-                self.printLog('open destination photo success.',True)
-                # 打印爬到的文本
-                # print('正在热映电影：', text_find)
-                self.printLog('正在热映电影：%s' % text_find,True)
-                # print(int(time.time() -self.time))
-            except EOFError:
-                print('input path error')
+            image.show()
+            # print('open destination photo success.')
+            self.printLog('open destination photo success.',True)
+            # 打印爬到的文本
+            # print('正在热映电影：', text_find)
+            self.printLog('正在热映电影：%s' % text_find,True)
+            # print(int(time.time() -self.time))
         except Exception as exp:
             # print('exception :%s' % exp)
             self.printLog('exception :%s' % exp,True)
