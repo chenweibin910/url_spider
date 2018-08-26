@@ -5,6 +5,7 @@ import time
 import threading
 import re
 import sys
+import logging
 
 from lxml import html
 from PIL import Image
@@ -23,7 +24,16 @@ class urlfind(object):
         self.text_path = r'//li[@class="title"]//a/text()'
         # 所需查找图片正则表达式
         self.reg = r'src="(https[^"]+?\.jpg)"'
-        self.time = 0
+        self.time = time.time()
+        # 日志
+        self.logger = logging.getLogger(__name__)
+        self.logger.setLevel(level=logging.INFO)
+        self.printLog('')
+        handler = logging.FileHandler("%s\log\log.txt"%self.path)
+        handler.setLevel(logging.INFO)
+        formatter = logging.Formatter('%(asctime)s -%(name)s-%(levelname)s- %(message)s')
+        handler.setFormatter(formatter)
+        self.logger.addHandler(handler)
 
     def get_request(self, url, text_path, jpg_reg):
         '''
@@ -77,7 +87,7 @@ class urlfind(object):
             #     printLog('The path is already exisit.del...')
             #     printLog('del %s success.' % path)
             # 建立目录
-            if not os.path.exists(self.path):
+            if not os.path.exists(dest_path):
                 os.system(cmd_tmp)
                 self.printLog('create %s success' % dest_path)
             # 新建图片
@@ -252,12 +262,14 @@ class urlfind(object):
         # cmd_cre = r'type log:> %s\log.log' % self.path + '\\log'
         t = time.strftime("%Y-%m-%d %H:%M:%S ", time.localtime())
         cmd_log = r'echo %s%s>>log.log' % (t, tips)
+        path = self.path + '\\log'
         try:
             if flag:
                 print(tips)
-            if not os.path.exists(self.path +'\\log'):
-                os.mkdir(self.path +'\\log')
-            os.chdir(self.path + '\\log')
+            if not os.path.exists(path):
+                os.mkdir(path)
+            self.logger.info(tips)
+            os.chdir(path)
             os.popen(cmd_log)
             os.popen('exit')
         except Exception as e:
@@ -267,50 +279,48 @@ class urlfind(object):
 
     def run(self, *args, **kwargs):
 
-        # 异常
-        exp = ''
         # 路径
         try:
             self.path = input('input workspace:\t')
             if self.path:
                 print('input path is %s' % self.path)
-                if not re.match(r'^([a-zA-Z]?:\\)[(a-zA-Z0-9\_)\\?]*',self.path ):
-                    print( 'input path format error.')
-                    raise Exception
+                if not re.match(r'[a-zA-Z]{1}:[\\a-zA-Z0-9_]+',self.path ):
+                    exp = 'input path format error.'
+                    self.printLog(exp)
+                    raise (Exception,exp)
             self.time = time.time()
             if not self.path:
-                print('input is null,use default path.')
-                # self.printLog('input is null,use default path.')
+                self.printLog('input is null,use default path.',True)
                 self.path = r'E:\temp'
             dest_path = self.path + r'\new'
-            # print('workspace = %s' % self.path)
             self.printLog('workspace = %s' % self.path,True)
             img_list, text_find = self.get_request(self.url, self.text_path, self.reg)
 
             rst = self.path_del_create(self.path, dest_path)
             if not rst:
-                # print('update %s failed.' % self.path)
-                self.printLog('update %s failed.' % self.path,True)
-                raise Exception
+                exp = 'update %s failed.' % self.path
+                self.printLog(exp,True)
+                raise (Exception, exp)
             rst = self.downloadAndSave_pic(self.path, img_list)
             if not rst:
-                # print('ERROR.')
-                self.printLog('download flie error.',True)
-                raise Exception
+                exp = 'download flie error.'
+                self.printLog(exp,True)
+                raise (Exception, exp)
 
             imPathList = self.get_picPathList(self.path)
 
             image = self.unionPic(self.path, dest_path, imPathList)
 
+            if not image:
+                exp = 'image is null.'
+                self.printLog(exp)
+                raise (Exception, exp)
             image.show()
-            # print('open destination photo success.')
             self.printLog('open destination photo success.',True)
             # 打印爬到的文本
-            # print('正在热映电影：', text_find)
             self.printLog('正在热映电影：%s' % text_find,True)
-            # print(int(time.time() -self.time))
+            self.printLog('main run time:%s'%str(int(time.time() -self.time)))
         except Exception as exp:
-            # print('exception :%s' % exp)
             self.printLog('exception :%s' % exp,True)
 
         return True
@@ -318,7 +328,8 @@ class urlfind(object):
 def main(arg):
     time.sleep(1)
     print('main thread start!the thread name is:%s\r' % threading.currentThread().getName())
-    urlfind().run()
+    url = urlfind()
+    url.run()
     time.sleep(1)
 
 def mytime(threads):
@@ -349,9 +360,9 @@ def mytime(threads):
             sys.stdout.flush()
             time.sleep(0.2)
     sys.stdout.write(" progress: %d%%   \r" % (100))
-    print('runtime:%s'%int(time.time() - t))
+    print('runtime:%ss'%int(time.time() - t))
 
-def thread(*args):
+def myThread(*args):
     threads = []
 
     t = threading.Thread(target=main, args=(0,))
@@ -379,6 +390,7 @@ def thread(*args):
     args是一个包含将要提供给函数的按位置传递的参数的元组。如果省略了args，任何参数都不会被传递，
     kwargs是一个包含关键字参数的字典。
     '''
+
 def test(*args,**kwargs):
     for t in args:
         print (t)
@@ -386,7 +398,7 @@ def test(*args,**kwargs):
 
 if __name__ == '__main__':
 
-    thread()
+    myThread()
     # urlfind().run()
     # test('main','mytime')
     # print('\n')
