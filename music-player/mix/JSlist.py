@@ -34,14 +34,7 @@ def openFile():
         file_obj.close()
         if not js_list:
             js_list = [{'mp3': 'mix/汪苏泷 - 专属味道.mp3', 'title': '专属味道', 'artist': '汪苏泷', 'cover': 'mix/1.png', 'rating': 4,
-                    'duration': '03:33'},
-                   {'mp3': 'mix/july - in love.mp3', 'title': 'in love', 'artist': 'july', 'cover': 'mix/1.png',
-                    'rating': 4,
-                    'duration': '03:53'},
-                   {'mp3': 'mix/sara、孙子涵 - 请安静的忘记我.mp3', 'title': '请安静的忘记我', 'artist': 'sara、孙子涵', 'cover': 'mix/1.png',
-                    'rating': 4, 'duration': '04:07'},
-                   {'mp3': 'mix/马頔 - 南山南.mp3', 'title': '马頔 - 南山南', 'artist': '马頔', 'cover': 'mix/1.png', 'rating': 4,
-                    'duration': '05:24'}]
+                    'duration': '03:33'}]
         return js_list
 
 
@@ -59,6 +52,10 @@ def writeFlie(js_list):
             if file.split('-')[0].strip() in str(js_list):
                 continue
             addList.append(file)
+    for item in js_list:
+        if item['title']  not in fileList:
+            del(js_list[js_list.index(item)])
+
     for file in addList:
         newdic = {key: '' for key in js_list[0].keys()}
         newdic.update(

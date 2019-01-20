@@ -56,6 +56,9 @@
         myPlaylist = playlist;
 
         current = 0;
+		
+		play_style = "顺序播放";
+		play_num = 2;
 
         appMgr = function() {
             playlist = new playlistMgr();
@@ -72,7 +75,28 @@
                 layout.init();
 
             });
+			var MyDiv = document.querySelectorAll("div")[4];
+			var button = document.createElement("input"); 
+			button.setAttribute("type", "button");
+			button.setAttribute("value", play_style);
+			button.setAttribute("id", 11);
+			button.setAttribute("class", "style_button");
+			button.style.width = "100%";
+			button.style.background = "#555555";
+			button.style.border = "#555555";
+			button.style.color = "#ffffff";
+			button.setAttribute("onclick", "changme_style(this)");
+			MyDiv.appendChild(button);
+
         };
+		changme_style = function(id) {
+			play_num += 1;
+			tmp = parseInt(play_num/3);
+			if (play_num - tmp*3 == 0) play_style = "随机播放";
+			if (play_num - tmp*3 == 1) play_style = "单曲循环";
+			if (play_num - tmp*3 == 2) play_style = "顺序播放";
+			id.setAttribute("value", play_style);
+		};
 
         playlistMgr = function() {
 
@@ -196,7 +220,9 @@
             }
 
             function playlistNext() {
+				if (play_style == "随机播放") current = Math.floor(Math.random()*(myPlaylist.length+1));
                 var index = (current + 1 < myPlaylist.length) ? current + 1 : 0;
+				if (play_style == "单曲循环") index = current
                 playlistAdvance(index);
             }
 
@@ -445,6 +471,7 @@
 
             function setTitle() {
                 $title.html(trackName(current));
+				$(document).attr("title",trackName(current));
             }
 
             function setArtist() {
