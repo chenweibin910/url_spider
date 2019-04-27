@@ -87,7 +87,8 @@
 			button.style.color = "#ffffff";
 			button.setAttribute("onclick", "changme_style(this)");
 			MyDiv.appendChild(button);
-
+			
+			var t=window.setInterval(myTimer,1000);
         };
 		changme_style = function(id) {
 			play_num += 1;
@@ -97,7 +98,12 @@
 			if (play_num - tmp*3 == 2) play_style = "Ë³Ðò²¥·Å";
 			id.setAttribute("value", play_style);
 		};
-
+		
+		function myTimer(){
+			var d=new Date();
+			document.getElementById('clock').innerHTML=d.toLocaleString();
+		};
+		
         playlistMgr = function() {
 
             var playing = false, markup, $myJplayer = {},$tracks,showHeight = 0,remainingHeight = 0,$tracksWrapper, $more;
