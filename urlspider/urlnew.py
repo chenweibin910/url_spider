@@ -1,14 +1,19 @@
 # -*- coding:UTF-8 -*-
-import requests
-import os, re, sys, traceback
-import time
-import threading
 import logging
-
-from lxml import html
-from PIL import Image
+import os
+import re
+import sys
+import threading
+import time
+import traceback
 import urllib.request
 
+import requests
+from PIL import Image
+from fake_useragent import UserAgent
+from lxml import html
+
+ua = UserAgent()
 global progress
 
 
@@ -44,12 +49,15 @@ class urlfind(object):
         # 需要爬数据的网址
         # url = 'https://movie.douban.com/'
         try:
-            page = requests.Session().get(self.url)
+            headers = {'User-Agent': ua.chrome}
+            page = requests.get(self.url, headers=headers)
             tree = html.fromstring(page.text)
             text_result = tree.xpath(text_path)
-            self.printLog(tips='conect to the url success.')
+
             # 读取网页源码
-            html_1 = urllib.request.urlopen(self.url).read()
+            # html_1 = urllib.request.urlopen(url).read()
+            html_1 = page.text
+            self.printLog(tips='conect to the url success.')
 
             # reg = r'src="(https[^"]+?\.jpg)"'
             img_re = re.compile(jpg_reg)
