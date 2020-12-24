@@ -143,8 +143,14 @@
 		<link rel="stylesheet" href="css/animate.min.css">
 	</head>
 	<body>
-		<script src="http://www.jq22.com/jquery/jquery-2.1.1.js"></script>
-		<script src="https://threejs.org/build/three.js"></script>
+		<!script src="http://www.jq22.com/jquery/jquery-2.1.1.js"></script!>
+		<!script src="https://threejs.org/build/three.js"></script!>
+		
+		<script src="js/three.js"></script>
+		<script src="js/jquery.min.js"></script>
+		
+		<script src="js/images.js"></script>
+		
 		<script src="js/tween.min.js"></script>
 		<script src="js/TrackballControls.js"></script>
 		<script src="js/CSS3DRenderer.js"></script>
@@ -240,31 +246,35 @@
 			// 生成虚拟数据
 			let a = 1;
 	        for(var i=0;i<199;i++){
-	        	if(a==1){
+	        	//if(a==1){
+	        		//personArray.push({
+			        //    image: "img/" + a + ".jpg"
+			        //});
 	        		personArray.push({
-			            image: "img/1.jpg"
+			            image: "data:image/jpeg;base64," + eval("img_" + a + "_jpg")
 			        });
-	        	}else if(a==2){
-	        		personArray.push({
-			            image: "img/2.jpg"
-			        });
-	        	}else if(a==3){
-	        		personArray.push({
-			            image: "img/3.jpg"
-			        });
-	        	}else if(a==4){
-	        		personArray.push({
-			            image: "img/4.jpg"
-			        });
-	        	}else if(a==5){
-	        		personArray.push({
-			            image: "img/5.jpg"
-			        });
-	        	}else if(a==6){
-	        		personArray.push({
-			            image: "img/6.jpg"
-			        });
-	        	}
+	        	//}
+				//else if(a==2){
+	        	//	personArray.push({
+			    //        image: "img/2.jpg"
+			    //    });
+	        	//}else if(a==3){
+	        	//	personArray.push({
+			    //        image: "img/3.jpg"
+			    //    });
+	        	//}else if(a==4){
+	        	//	personArray.push({
+			    //        image: "img/4.jpg"
+			    //    });
+	        	//}else if(a==5){
+	        	//	personArray.push({
+			    //        image: "img/5.jpg"
+			    //    });
+	        	//}else if(a==6){
+	        	//	personArray.push({
+			    //        image: "img/6.jpg"
+			    //    });
+	        	//}
 				a++;
 				if(a == 7){
 					a=1;
