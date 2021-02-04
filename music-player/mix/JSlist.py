@@ -1,6 +1,5 @@
 # -*- coding:UTF-8 -*-
 import json
-import execjs
 import os
 import re
 import time
@@ -96,8 +95,8 @@ def dis_rep(str):
 
 if __name__ == '__main__':
     js_list = read_data()
-    print(js_list)
+    # print(len(js_list))
     write_data(js_list)
-    list = read_data()
-    print(js_list)
-    print(os.listdir(os.getcwd()))
+    js_list = read_data()
+    print("更新后歌曲数量：", len(js_list))
+    # print(os.listdir(os.getcwd()))

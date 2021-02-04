@@ -162,7 +162,7 @@ class XiaMi:
             song_id = songPlayInfo["songId"]
             download_url_dict[song_id] = song_download_url
 
-        print({"歌曲下载地址为:": download_url_dict})
+        print({"歌曲下载地址数量:": len(download_url_dict)})
         return download_url_dict
 
     # 处理爬虫获取到的数据，这里我就输出值
@@ -207,9 +207,12 @@ def download_and_extract(filepath, save_dir):
     """
     file_list = os.listdir()
     for index, one in enumerate(filepath):
-        filename = one["name"].replace("/", " ") + ".mp3"
+        filename = one["singer"][:50] + " - " + one["name"] + ".mp3"
+        filename = filename.replace("/", " ")
         url = one["download_url"]
-        if not url or filename in file_list:
+        if not url:
+            continue
+        if filename in file_list:
             continue
         save_path = os.path.join(save_dir, filename)
         urllib.request.urlretrieve(url, save_path)
@@ -232,14 +235,13 @@ if __name__ == '__main__':
         songs = dy_songs["songs"]
         song_ids = {}
         for song in songs:
-            song_id, song_name = song["songId"], song["songName"]
+            song_id, song_name, singer = song["songId"], song["songName"], song["singers"]
             song_ids.update({
-                song_id: {"name": song_name}
+                song_id: {"name": song_name, "singer": singer}
             })
         download_url_dict = xm.get_song_download_url(*song_ids.keys())
         for song_id in list(download_url_dict):
             song_ids[song_id].update({"download_url": download_url_dict[song_id]})
-        print(song_ids)
-
-        # save_dir = 'name/'
+        # print(song_ids)
+        # save_dir = ''
         # download_and_extract(list(song_ids.values()), save_dir)
