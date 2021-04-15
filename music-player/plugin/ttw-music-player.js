@@ -57,7 +57,7 @@
 
         current = 0;
 		
-		play_style = "顺序播放";
+		play_style = "椤哄簭鎾斁";
 		play_num = 2;
 
         appMgr = function() {
@@ -93,9 +93,9 @@
 		changme_style = function(id) {
 			play_num += 1;
 			tmp = parseInt(play_num/3);
-			if (play_num - tmp*3 == 0) play_style = "随机播放";
-			if (play_num - tmp*3 == 1) play_style = "单曲循环";
-			if (play_num - tmp*3 == 2) play_style = "顺序播放";
+			if (play_num - tmp*3 == 0) play_style = "闅忔満鎾斁";
+			if (play_num - tmp*3 == 1) play_style = "鍗曟洸寰幆";
+			if (play_num - tmp*3 == 2) play_style = "椤哄簭鎾斁";
 			id.setAttribute("value", play_style);
 		};
 		
@@ -226,9 +226,9 @@
             }
 
             function playlistNext() {
-				if (play_style == "随机播放") current = Math.floor(Math.random()*(myPlaylist.length+1));
+				if (play_style == "闅忔満鎾斁") current = Math.floor(Math.random()*(myPlaylist.length+1));
                 var index = (current + 1 < myPlaylist.length) ? current + 1 : 0;
-				if (play_style == "单曲循环") index = current
+				if (play_style == "鍗曟洸寰幆") index = current
                 playlistAdvance(index);
             }
 
