@@ -1,0 +1,9 @@
+Watching for file changes with StatReloader
+[23/Dec/2020 09:48:23] "GET / HTTP/1.1" 200 12
+Performing system checks...
+
+System check identified no issues (0 silenced).
+December 23, 2020 - 09:48:08
+Django version 3.1.4, using settings 'Project1.settings'
+Starting development server at http://0:9000/
+Quit the server with CONTROL-C.
